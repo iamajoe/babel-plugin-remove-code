@@ -1,0 +1,7 @@
+{
+    "plugins": [
+        ["../../../../index.js", {
+            "function": ["stripA", "stripB", "console.keepC.stripC", "console.stripD"]
+        }]
+    ]
+}

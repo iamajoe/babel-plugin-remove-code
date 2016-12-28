@@ -1,0 +1,34 @@
+{
+    "root": true,
+    "extends": [
+        "./node_modules/eslint-config-defaults/configurations/airbnb/es6.js"
+    ],
+    "env": {
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "impliedStrict": false,
+        "ecmaFeatures": {
+            "jsx": false
+        }
+    },
+    "rules": {
+        "strict": "off",
+        "indent": [2, 4],
+        "comma-dangle": [2, "never"],
+        "func-names": [0],
+        "no-param-reassign": [0],
+        "consistent-return": [0],
+        "no-unused-expressions": [0],
+        "no-labels": 0,
+        "keyword-spacing": ["error", { "before": true, "after": true }],
+
+        "max-len": ["warn", 160],
+
+        "no-empty-label": 0,
+        "space-after-keywords": 0,
+        "space-return-throw-case": 0
+    }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "babel-plugin-remove-code",
+  "version": "0.0.1",
+  "description": "Remove any code from your project.",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:sendoushi/babel-plugin-remove-code.git"
+  },
+  "authors": [
+    "Joel Santos <joel@sendoushi.com>"
+  ],
+  "main": "./dist/index.js",
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint ./src/**/*.js || true",
+    "mocha": "BABEL_ENV=test mocha ./test/test.js --compilers js:babel-core/register || true",
+    "prebuild": "npm run clean && npm run test",
+    "build": "BABEL_ENV=production babel src --out-dir dist --source-maps inline --ignore *.spec.js",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.20.0",
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "eslint": "^2.0.0",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-react": "^6.2.0",
+    "glob": "^7.1.1",
+    "mocha": "^3.2.0"
+  },
+  "keywords": [
+    "babel",
+    "plugin",
+    "babel-plugin",
+    "variables",
+    "functions",
+    "strip",
+    "remove"
+  ]
+}

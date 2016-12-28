@@ -1,0 +1,10 @@
+**/*.ico
+**/*.png
+**/*.gif
+**/*.jpg
+**/*.html
+**/*.php
+**/.*
+node_modules
+dist/*
+**/_test/data

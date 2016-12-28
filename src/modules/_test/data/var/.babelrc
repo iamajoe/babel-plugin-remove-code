@@ -1,0 +1,7 @@
+{
+    "plugins": [
+        ["../../../../index.js", {
+            "var": ["bar", "simple"]
+        }]
+    ]
+}

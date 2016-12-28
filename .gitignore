@@ -1,0 +1,10 @@
+.DS_Store
+.vscode
+
+node_modules
+bower_components
+vendor
+
+*.log
+*.log.*
+_tmp_test.*
