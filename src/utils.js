@@ -70,31 +70,62 @@ const goUp = (path, types = [], max = 5) => {
  * @param {object} path
  * @returns {array}
  */
-const getMemberExpressionKeys = (path) => {
-    let checkingPath = path;
-    const checkedObj = [];
+const getObjItem = (path) => {
+    let arr = [];
+    let toCheck;
 
-    if (!path) { return checkedObj; }
+    if (!path) { return arr; }
 
-    // Lets iterate through the object to check if all keys are set
-    while (checkingPath.type === 'MemberExpression' || checkingPath.type === 'Identifier') {
-        if (checkingPath.type === 'MemberExpression') {
-            // Is it an object inside?
-            const property = checkingPath.property || checkingPath.node.property;
-            (property.type === 'Identifier') && checkedObj.push(property.name);
+    // For the identifier likes...
+    arr = (path.type === 'Identifier') ? [path.name || path.node.name] : arr;
 
-            // The new object to iterate through
-            checkingPath = checkingPath.object || checkingPath.node.object || {};
-        } else if (checkingPath.type === 'Identifier') {
-            // Maybe already an identifier
-            (checkingPath.type === 'Identifier') && checkedObj.push(checkingPath.name);
+    // Lets check under other possible keys
+    toCheck = path.object || path.node && path.node.object;
+    arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
 
-            // So that it doesn't continue any longer
-            checkingPath = {};
+    toCheck = path.property || path.node && path.node.property;
+    arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
+
+    toCheck = path.id || path.node && path.node.id;
+    arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
+
+    toCheck = path.left || path.node && path.node.left;
+    arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
+
+    return arr;
+};
+
+/**
+ * Gets property
+ *
+ * @param {object} opts
+ * @param {object} path
+ * @param {array} properties
+ * @returns
+ */
+const getsArrItem = (opts, path, properties) => {
+    let rightProperty;
+
+    // Go through each property
+    for (let i = 0; i < properties.length; i += 1) {
+        const property = properties[i];
+        let toCheck;
+
+        toCheck = (property.type === 'Identifier') && property;
+        toCheck = toCheck || property.node.value && property.get('value');
+        toCheck = toCheck || property.node.local && property.get('local');
+        toCheck = toCheck || property.node.id && property.get('id');
+        toCheck = toCheck && toCheck.node && toCheck.node.name;
+
+        if (opts.indexOf(toCheck) === -1) {
+            continue;
         }
+
+        // It was found!
+        rightProperty = (properties.length > 1) ? property : path;
     }
 
-    return checkedObj;
+    return rightProperty;
 };
 
 /**
@@ -123,7 +154,7 @@ const parsePath = (opts = [], path) => {
         // We need to check for possible objects now...
         // Lets get the root MemberExpression
         const actualPath = goUpRoot(path, ['MemberExpression'], newArr.length + 1);
-        const objKeys = getMemberExpressionKeys(actualPath);
+        const objKeys = getObjItem(actualPath);
 
         // It may not have keys for some reason
         if (!objKeys.length) { return false; }
@@ -156,4 +187,4 @@ const remove = (t, opts = [], path, actualType = []) => {
 // -----------------------------------------
 // Export
 
-export { goUp, goUpRoot, parsePath, getMemberExpressionKeys, remove };
+export { goUp, goUpRoot, parsePath, getObjItem, getsArrItem, remove };

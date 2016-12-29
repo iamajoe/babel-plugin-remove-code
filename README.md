@@ -8,9 +8,7 @@
 
 - [x] debugger
 - [x] var
-    - [x] export
-    - [x] assign
-    - [ ] condition
+- [x] export
 - [x] import
 - [x] function
 - [ ] ???

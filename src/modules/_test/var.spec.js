@@ -28,24 +28,29 @@ describe('remove-code.vars', () => {
     });
 
     it('should remove var', () => {
-        expect(actual).to.not.contain('const stripA =');
-        expect(actual).to.not.contain('let stripB');
+        expect(actual).to.not.contain('const stripA = ');
+        expect(actual).to.not.contain('let stripB;');
         expect(actual).to.not.contain('stripB =');
-        expect(actual).to.not.contain('export const stripC =');
-        expect(actual).to.not.contain('export { stripD }');
+        expect(actual).to.not.contain('export const stripC = {};');
     });
 
     it('should maintain other vars', () => {
         expect(actual).to.contain('const keepA =');
-        expect(actual).to.contain('let keepB');
-        expect(actual).to.contain('keepB =');
-        expect(actual).to.contain('export const keepC =');
-        expect(actual).to.contain('export { keepD }');
+        expect(actual).to.contain('let keepB;');
+        expect(actual).to.contain('keepB = \'foo\';');
+        expect(actual).to.contain('export const keepC = {};');
     });
 
-    it.skip('should remove variable reference usages', () => {
+    it('should remove variable reference usages', () => {
+        expect(actual).to.not.contain('export { stripD };');
+        expect(actual).to.not.contain('export default { stripA, keepA };');
         expect(actual).to.not.contain('console.log(stripA);');
-        expect(actual).to.not.contain('export default { stripA }');
+    });
+
+    it('should maintain other vars reference usages', () => {
+        expect(actual).to.contain('export { keepD };');
+        expect(actual).to.contain('export default { keepA };');
+        expect(actual).to.contain('console.log(keepA);');
     });
 
     // TODO: Expressions need to be done first

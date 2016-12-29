@@ -27,14 +27,14 @@ describe('remove-code.import', () => {
         fs.writeFileSync(path.join(dataDir, '_tmp_test.js'), actual, { encoding: 'UTF-8' });
     });
 
-    it('should remove export declarations', () => {
+    it('should remove import declarations', () => {
         expect(actual).to.not.contain('import { fsA } from "stripA"');
         expect(actual).to.not.contain('import fsB from "stripB"');
         expect(actual).to.not.contain('import { fsCProxy as foo } from "stripC"');
         expect(actual).to.not.contain('import "stripD"');
     });
 
-    it('should maintain other vars and exports', () => {
+    it('should maintain other vars and import', () => {
         expect(actual).to.contain('import { fkA } from "keepA"');
         expect(actual).to.contain('import fkB from "keepB"');
         expect(actual).to.contain('import { fkCProxy as fkC } from "keepC"');

@@ -1,7 +1,0 @@
-{
-    "plugins": [
-        ["../../../../index.js", {
-            "assign": ["stripA", "stripB", "stripC"]
-        }]
-    ]
-}

@@ -4,4 +4,4 @@ export const keepA = {};
 export { stripB };
 export { keepB };
 
-export default { stripC };
+export default { stripC, keepC };

@@ -36,5 +36,6 @@ describe('remove-code.export', () => {
     it('should maintain other vars and exports', () => {
         expect(actual).to.contain('export const keepA');
         expect(actual).to.contain('export { keepB }');
+        expect(actual).to.contain('export default { keepC }');
     });
 });

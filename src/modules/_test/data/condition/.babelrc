@@ -1,7 +1,0 @@
-{
-    "plugins": [
-        ["../../../../index.js", {
-            "condition": ["bar === \"foo\""]
-        }]
-    ]
-}
