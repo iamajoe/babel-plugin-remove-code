@@ -24,7 +24,7 @@ const goUpRoot = (path, types = [], max = 5) => {
         }
 
         // Lets check for the type
-        if (types.indexOf(rightPath.type) !== -1) {
+        if (types.indexOf(rightPath.type) !== -1 && !rightPath.removed) {
             lastOfType = rightPath;
         }
 
@@ -44,25 +44,24 @@ const goUpRoot = (path, types = [], max = 5) => {
  * @returns {object}
  */
 const goUp = (path, types = [], max = 5) => {
-    let rightPath = path;
+    let rightPath = path || {};
     let i = 0;
 
     // Lets get the expression statement
     while (types.indexOf(rightPath.type) === -1) {
         // We need to break if we've gone too far
-        if (max === i || !rightPath || !rightPath.type) {
-            rightPath = undefined;
+        if (max === i || !rightPath.type) {
             break;
         }
 
         // Lets get the next one
-        rightPath = rightPath.parentPath;
+        rightPath = rightPath.parentPath || {};
 
         // Set a max of iteractions
         i += 1;
     }
 
-    return rightPath;
+    return rightPath.type && !rightPath.removed && rightPath || undefined;
 };
 
 /**
@@ -72,8 +71,10 @@ const goUp = (path, types = [], max = 5) => {
  * @returns {array}
  */
 const getMemberExpressionKeys = (path) => {
-    let checkingPath = path || {};
+    let checkingPath = path;
     const checkedObj = [];
+
+    if (!path) { return checkedObj; }
 
     // Lets iterate through the object to check if all keys are set
     while (checkingPath.type === 'MemberExpression' || checkingPath.type === 'Identifier') {
@@ -86,7 +87,7 @@ const getMemberExpressionKeys = (path) => {
             checkingPath = checkingPath.object || checkingPath.node.object || {};
         } else if (checkingPath.type === 'Identifier') {
             // Maybe already an identifier
-            checkedObj.push(checkingPath.name);
+            (checkingPath.type === 'Identifier') && checkedObj.push(checkingPath.name);
 
             // So that it doesn't continue any longer
             checkingPath = {};
@@ -101,14 +102,16 @@ const getMemberExpressionKeys = (path) => {
  *
  * @param {array} opts
  * @param {object} path
- * @returns
+ * @returns {path}
  */
-const parsePath = (opts, path) => {
+const parsePath = (opts = [], path) => {
+    if (!opts.length || !path) { return undefined; }
+
     const optsArr = opts.map((val) => {
         const newArr = val.split('.').reverse();
 
         // Check if actually exists something with the path name
-        const check = newArr.filter(cVal => cVal.indexOf(path.node.name) !== -1);
+        const check = newArr.filter(cVal => cVal.indexOf(path.node.name || path.node.value) !== -1);
 
         // No need to go further if it isn't an object
         if (check.length && newArr.length === 1) {
@@ -122,13 +125,18 @@ const parsePath = (opts, path) => {
         const actualPath = goUpRoot(path, ['MemberExpression'], newArr.length + 1);
         const objKeys = getMemberExpressionKeys(actualPath);
 
+        // It may not have keys for some reason
+        if (!objKeys.length) { return false; }
+
         // Lets see if the object is the same
-        const isIt = path.node.name === objKeys[0] && newArr.join('.') === objKeys.join('.');
+        const name = path.node.name || path.node.value;
+        const isIt = name === objKeys[0] && newArr.join('.') === objKeys.join('.');
         return isIt ? actualPath : false;
     }).filter(val => !!val);
 
     // Return the actual path
-    return optsArr[0];
+    const actualPath = optsArr[0];
+    return actualPath && !actualPath.removed && actualPath || undefined;
 };
 
 /**
@@ -138,12 +146,11 @@ const parsePath = (opts, path) => {
  * @param {array} opts
  * @param {object} path
  */
-const remove = (t, opts = [], path, actualType) => {
-    if (opts.indexOf(path.node.name) === -1) { return; }
+const remove = (t, opts = [], path, actualType = []) => {
+    const actualPath = goUp(parsePath(opts, path), actualType);
 
-    // Lets remove the path
-    const rightPath = goUp(path, actualType);
-    rightPath && rightPath.remove();
+    // Now lets actually remove
+    actualPath && !actualPath.removed && actualPath.remove();
 };
 
 // -----------------------------------------

@@ -1,21 +1,20 @@
 'use strict';
 
-import { remove as generalRemove } from '../utils.js';
+import { remove as removeUtil } from '../utils.js';
 
-const ACTUAL_TYPE = ['ExportNamedDeclaration'];
-// TODO: ExportDefaultDeclaration
+const ACTUAL_TYPE = ['ExportSpecificer', 'ExportDefaultDeclaration', 'ExportNamedDeclaration'];
 
 // -----------------------------------------
 // Functions
 
 /**
- * Remove path
+ * Remove vars
  *
  * @param {object} t
  * @param {array} opts
  * @param {object} path
  */
-const remove = (t, opts = [], path) => generalRemove(t, opts, path, ACTUAL_TYPE);
+const remove = (t, opts = [], path) => removeUtil(t, opts, path, ACTUAL_TYPE);
 
 // -----------------------------------------
 // Export

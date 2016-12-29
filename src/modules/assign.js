@@ -1,8 +1,8 @@
 'use strict';
 
-import { getRightPath } from '../utils.js';
+import { goUp, parsePath } from '../utils.js';
 
-const ACTUAL_TYPE = ['ExpressionStatement'];
+const ACTUAL_TYPE = ['AssignmentExpression', 'VariableDeclarator'];
 
 // -----------------------------------------
 // Functions
@@ -15,14 +15,22 @@ const ACTUAL_TYPE = ['ExpressionStatement'];
  * @param {object} path
  */
 const remove = (t, opts = [], path) => {
-    if (opts.indexOf(path.node.name) === -1) { return; }
+    const actualPath = goUp(parsePath(opts, path), ACTUAL_TYPE) || {};
 
-    const rightPath = getRightPath(path, ACTUAL_TYPE);
-
-    // Lets check if really is a function
+    // Lets check per type
+    if (actualPath.type === 'AssignmentExpression') {
+        // Lets check if it is the right assignment
+        if (actualPath.node.left &&
+            actualPath.node.left.type === 'Identifier' &&
+            opts.indexOf(actualPath.node.left.name) !== -1) {
+            actualPath.remove();
+        }
+    } else if (actualPath.type === 'VariableDeclarator') {
+        // Remove any assignment
+        actualPath.node.init = null;
+    }
     // TODO: ...
-
-    rightPath && rightPath.remove();
+    // actualPath.type === 'VariableDeclarator' && actualPath.node.init.remove();
 };
 
 // -----------------------------------------

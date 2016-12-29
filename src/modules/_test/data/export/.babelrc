@@ -1,7 +1,7 @@
 {
     "plugins": [
         ["../../../../index.js", {
-            "export": ["foo"]
+            "export": ["stripA", "stripB", "stripC"]
         }]
     ]
 }

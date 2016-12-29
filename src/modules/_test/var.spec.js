@@ -14,44 +14,38 @@ const dataDir = path.join(__dirname, 'data', 'var');
 // --------------------------------
 // Functions
 
-/**
- * Trims string and makes it line break insensitive
- *
- * @param {string} str
- * @returns {string}
- */
-const trim = (str) => str.replace(/^\s+|\s+$/, '').replace(/\r?\n|\r/g, '');
-
 // --------------------------------
 // Suite of tests
 
-describe.skip('remove-code.vars', () => {
+describe('remove-code.vars', () => {
     let actual;
-    let expected;
 
     before(() => {
-        const actualPath = path.join(dataDir, 'actual.js');
+        const mockPath = path.join(dataDir, 'mock.js');
+        actual = transformFileSync(mockPath).code;
 
-        actual = transformFileSync(actualPath).code;
-        expected = fs.readFileSync(path.join(dataDir, 'expected.js')).toString();
+        fs.writeFileSync(path.join(dataDir, '_tmp_test.js'), actual, { encoding: 'UTF-8' });
     });
 
     it('should remove var', () => {
-        expect(actual).to.not.contain('const simple');
-        expect(actual).to.not.contain('export const bar');
-        expect(actual).to.not.contain('test1: () => {');
+        expect(actual).to.not.contain('const stripA =');
+        expect(actual).to.not.contain('let stripB');
+        expect(actual).to.not.contain('stripB =');
+        expect(actual).to.not.contain('export const stripC =');
+        expect(actual).to.not.contain('export { stripD }');
     });
 
     it('should maintain other vars', () => {
-        expect(actual).to.contain('let foo;');
-        expect(actual).to.contain('foo = \'bar\';');
-        expect(actual).to.contain('foo = \'foo\';');
-        expect(actual).to.contain('console.log(foo);');
-        expect(actual).to.contain('export { foo };');
+        expect(actual).to.contain('const keepA =');
+        expect(actual).to.contain('let keepB');
+        expect(actual).to.contain('keepB =');
+        expect(actual).to.contain('export const keepC =');
+        expect(actual).to.contain('export { keepD }');
     });
 
-    it('should remove variable reference usages', () => {
-        expect(actual).to.not.contain('console.log(bar);');
+    it.skip('should remove variable reference usages', () => {
+        expect(actual).to.not.contain('console.log(stripA);');
+        expect(actual).to.not.contain('export default { stripA }');
     });
 
     // TODO: Expressions need to be done first
@@ -62,14 +56,5 @@ describe.skip('remove-code.vars', () => {
         expect(actual).to.not.contain('bar ||');
         expect(actual).to.not.contain('bar &&');
         expect(actual).to.not.contain('!bar');
-    });
-
-    // TODO: Other stuff to set yet
-    it.skip('should be what is expected', () => {
-        fs.writeFileSync(path.join(dataDir, '_tmp_test.js'), actual, { encoding: 'UTF-8' });
-
-        // For line break insensitve
-        // TODO: We should improve and make it work with the lines also
-        expect(trim(actual)).to.equal(trim(expected));
     });
 });

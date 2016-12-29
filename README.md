@@ -7,13 +7,12 @@
 **Supported removals**
 
 - [x] debugger
-- [ ] var
-- [ ] condition
-- [ ] export
-- [ ] assign
+- [x] var
+    - [x] export
+    - [x] assign
+    - [ ] condition
+- [x] import
 - [x] function
-- [ ] module
-- [ ] object key
 - [ ] ???
 
 ## Example
@@ -21,29 +20,13 @@
 **In**
 
 ```javascript
-import { foo };
-export const something = 'in';
-
-export const foo = 'foo';
-
-export const bar = 'bar';
-export default { bar: 'bar' };
-
-console.log('foo');
-
-if (bar === "foo") { console.warn('bar'); }
-
-let simple;
-simple = 'foo';
-
-debugger;
+// TODO: ...
 ```
 
 **Out**
 
 ```javascript
-export const something = 'in';
-let simple;
+// TODO: ...
 ```
 
 ## Installation
@@ -62,13 +45,13 @@ npm install --save-dev babel-plugin-remove-code
 {
   "plugins": [
     ["remove-code", {
-        "var": ["foo"],
+        "var": ["stripA"],
         "debugger": true,
-        "import": ["foo"],
-        "export": ["bar"],
-        "function": ["console.log"],
-        "condition": ["bar === \"foo\""],
-        "assign": ["simple"]
+        "import": ["stripB"],
+        "export": ["stripC"],
+        "function": ["stripD"],
+        "condition": ["stripE === \"foo\""],
+        "assign": ["stripF"]
     }]
   ]
 }
