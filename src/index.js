@@ -15,21 +15,7 @@ import { remove as removeImport } from './modules/import.js';
 export default function ({ types: t }) {
     return {
         visitor: {
-            Identifier(path) {
-                // const varArr = this.opts.var || [];
-                // const funcArr = this.opts.function || [];
-                // const assignArr = this.opts.assign || [];
-                // const exportArr = this.opts.export || [];
-
-                // Vars related
-                // proxyAssign(t, assignArr.concat(varArr), path);
-                // proxyExport(t, exportArr.concat(varArr), path);
-                // removeConditions(t, this.opts.var, path);
-                // proxyVar(t, varArr, path);
-
-                // proxyFunc(t, funcArr, path);
-                // TODO: What about empty vars? Or unset vars?
-            },
+            // TODO: What about empty vars? Or unset vars?
             // Vars
             VariableDeclarator(path) {
                 const opts = this.opts.var || [];
