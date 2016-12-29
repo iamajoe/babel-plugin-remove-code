@@ -6,11 +6,11 @@
 
 **Supported removals**
 
-- [x] debugger
-- [x] var
-- [x] export
-- [x] import
-- [x] function
+- [x] [debugger](#debugger)
+- [x] [var](#var)
+- [x] [export](#export)
+- [x] [import](#import)
+- [x] [function](#function)
 - [ ] ???
 
 ## Example
