@@ -9,6 +9,19 @@ import { remove as removeImport } from './modules/import.js';
 // -----------------------------------------
 // Functions
 
+/**
+ * Proceed with the function
+ *
+ * @param {object} t
+ * @param {array} opts
+ * @param {object} path
+ * @param {function} fn
+ */
+const proceed = (t, opts = [], path, fn) => {
+    const checkedOpts = opts.filter(val => !!val);
+    checkedOpts.length && fn(t, checkedOpts, path);
+};
+
 // -----------------------------------------
 // Export
 
@@ -18,20 +31,16 @@ export default function ({ types: t }) {
             // TODO: What about empty vars? Or unset vars?
             // Vars
             VariableDeclarator(path) {
-                const opts = this.opts.var || [];
-                opts.length && removeVar(t, opts, path);
+                proceed(t, this.opts.var, path, removeVar);
             },
             AssignmentExpression(path) {
-                const opts = this.opts.var || [];
-                opts.length && removeVar(t, opts, path);
+                proceed(t, this.opts.var, path, removeVar);
             },
             LogicalExpression(path) {
-                const opts = this.opts.var || [];
-                opts.length && removeVar(t, opts, path);
+                proceed(t, this.opts.var, path, removeVar);
             },
             BinaryExpression(path) {
-                const opts = this.opts.var || [];
-                opts.length && removeVar(t, opts, path);
+                proceed(t, this.opts.var, path, removeVar);
             },
             // Debugger
             DebuggerStatement(path) {
@@ -40,37 +49,25 @@ export default function ({ types: t }) {
             },
             // Imports
             ImportDeclaration(path) {
-                const opts = this.opts.import || [];
-                opts.length && removeImport(t, opts, path);
+                proceed(t, this.opts.import, path, removeImport);
             },
             // Exports
             ExportDefaultDeclaration(path) {
-                let opts = this.opts.export || [];
-                opts = opts.concat(this.opts.var || []); // Vars references
-
-                opts.length && removeExport(t, opts, path);
+                proceed(t, [].concat(this.opts.export, this.opts.var), path, removeExport);
             },
             ExportNamedDeclaration(path) {
-                let opts = this.opts.export || [];
-                opts = opts.concat(this.opts.var || []); // Vars references
-
-                opts.length && removeExport(t, opts, path);
+                proceed(t, [].concat(this.opts.export, this.opts.var), path, removeExport);
             },
             // Functions
             CallExpression(path) {
-                let opts = this.opts.function || [];
-                opts.length && removeFunction(t, opts, path);
-
-                opts = this.opts.var || []; // Vars references
-                opts.length && removeFunctionByArg(t, opts, path);
+                proceed(t, this.opts.function, path, removeFunction);
+                proceed(t, this.opts.var, path, removeFunctionByArg);
             },
             FunctionDeclaration(path) {
-                const opts = this.opts.function || [];
-                opts.length && removeFunction(t, opts, path);
+                proceed(t, this.opts.function, path, removeFunction);
             },
             FunctionExpression(path) {
-                const opts = this.opts.function || [];
-                opts.length && removeFunction(t, opts, path);
+                proceed(t, this.opts.function, path, removeFunction);
             }
         }
     };
