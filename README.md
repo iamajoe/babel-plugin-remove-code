@@ -56,6 +56,11 @@ console.log(keepA);
 
 if (stripA === 'foo') {}
 if (keepA === 'foo') {}
+
+if (stripB === 'foo' && keepB === 'foo') {}
+
+keepA = stripA;
+keepB = stripB && keepB;
 ```
 
 **Out**
@@ -77,6 +82,10 @@ export default { keepA };
 console.log(keepA);
 
 if (keepA === 'foo') {}
+
+if (keepB === 'foo') {}
+
+keepB = keepB;
 ```
 
 #### Export

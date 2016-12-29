@@ -19,6 +19,10 @@ export default { stripA, keepA };
 console.log(stripA);
 console.log(keepA);
 
-// TODO: Not yet implemented...
 if (stripA === 'foo') {}
 if (keepA === 'foo') {}
+
+if (stripB === 'foo' && keepB === 'foo') {}
+
+keepA = stripA;
+keepB = stripB && keepB;

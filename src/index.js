@@ -25,6 +25,14 @@ export default function ({ types: t }) {
                 const opts = this.opts.var || [];
                 opts.length && removeVar(t, opts, path);
             },
+            LogicalExpression(path) {
+                const opts = this.opts.var || [];
+                opts.length && removeVar(t, opts, path);
+            },
+            BinaryExpression(path) {
+                const opts = this.opts.var || [];
+                opts.length && removeVar(t, opts, path);
+            },
             // Debugger
             DebuggerStatement(path) {
                 const opts = this.opts.debugger;

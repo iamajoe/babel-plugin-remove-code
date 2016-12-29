@@ -53,13 +53,16 @@ describe('remove-code.vars', () => {
         expect(actual).to.contain('console.log(keepA);');
     });
 
-    // TODO: Expressions need to be done first
-    it.skip('should remove expressions', () => {
-        // TODO: These should be regex
-        expect(actual).to.not.contain('bar ==');
-        expect(actual).to.not.contain('bar !=');
-        expect(actual).to.not.contain('bar ||');
-        expect(actual).to.not.contain('bar &&');
-        expect(actual).to.not.contain('!bar');
+    it('should remove expressions', () => {
+        expect(actual).to.not.contain('if (stripA === ');
+        expect(actual).to.not.contain('if (stripB === \'foo\' && ');
+        expect(actual).to.not.contain('keepA = stripA;');
+        expect(actual).to.not.contain('keepB = stripB && ');
+    });
+
+    it('should maintain other expressions', () => {
+        expect(actual).to.contain('if (keepA === \'foo\')');
+        expect(actual).to.contain('if (keepB === \'foo\')');
+        expect(actual).to.contain('keepB = keepB;');
     });
 });

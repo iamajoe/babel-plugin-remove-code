@@ -92,6 +92,9 @@ const getObjItem = (path) => {
     toCheck = path.left || path.node && path.node.left;
     arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
 
+    toCheck = path.right || path.node && path.node.right;
+    arr = toCheck ? arr.concat(getObjItem(toCheck)) : arr;
+
     return arr;
 };
 
