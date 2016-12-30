@@ -10,7 +10,7 @@
  * @param {array} opts
  * @param {object} path
  */
-const remove = (t, opts, path) => opts && !path.removed && path.remove();
+const remove = (t, opts, path) => opts && path && !path.removed && path.remove();
 
 // -----------------------------------------
 // Export

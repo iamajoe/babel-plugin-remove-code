@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-remove-code",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Remove any code from your project.",
   "repository": {
     "type": "git",
@@ -16,11 +16,11 @@
   "scripts": {
     "clean": "rm -rf dist/*",
     "test": "npm run eslint && npm run mocha",
-    "eslint": "eslint ./src/**/*.js || true",
-    "mocha": "BABEL_ENV=test mocha ./test/test.js --compilers js:babel-core/register || true",
+    "eslint": "eslint ./src/**/*.js",
+    "mocha": "BABEL_ENV=test mocha ./test/test.js --compilers js:babel-core/register",
     "prebuild": "npm run clean && npm run test",
     "build": "BABEL_ENV=production babel src --out-dir dist --source-maps inline --ignore *.spec.js,_test/**/*",
-    "prepublish": "npm run build"
+    "prepublish": "npm run test"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

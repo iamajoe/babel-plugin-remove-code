@@ -29,15 +29,29 @@ describe('remove-code.import', () => {
 
     it('should remove import declarations', () => {
         expect(actual).to.not.contain('import { fsA } from "stripA"');
-        expect(actual).to.not.contain('import fsB from "stripB"');
-        expect(actual).to.not.contain('import { fsCProxy as foo } from "stripC"');
-        expect(actual).to.not.contain('import "stripD"');
+        expect(actual).to.not.contain('import { fsB } from "stripBPattern"');
+        expect(actual).to.not.contain('fsB(');
+        expect(actual).to.not.contain('import fsC from "stripC"');
+        expect(actual).to.not.contain('console.log(fsC)');
+        expect(actual).to.not.contain('import fsD from "stripDPattern"');
+        expect(actual).to.not.contain('const fsDVar = fsD');
+        expect(actual).to.not.contain('import { fsEProxy as fsE } from "stripE"');
+        expect(actual).to.not.contain('import { fsFProxy as fsF } from "stripFPattern"');
+        expect(actual).to.not.contain('import "stripG"');
+        expect(actual).to.not.contain('import "stripHPattern"');
     });
 
     it('should maintain other vars and import', () => {
         expect(actual).to.contain('import { fkA } from "keepA"');
-        expect(actual).to.contain('import fkB from "keepB"');
-        expect(actual).to.contain('import { fkCProxy as fkC } from "keepC"');
-        expect(actual).to.contain('import "keepD"');
+        expect(actual).to.contain('import { fkB } from "keepBPattern"');
+        expect(actual).to.contain('fkB(\'foo\')');
+        expect(actual).to.contain('import fkC from "keepC"');
+        expect(actual).to.contain('console.log(fkC)');
+        expect(actual).to.contain('import fkD from "keepDPattern"');
+        expect(actual).to.contain('const fkDVar = fkD');
+        expect(actual).to.contain('import { fkEProxy as fkE } from "keepE"');
+        expect(actual).to.contain('import { fkFProxy as fkF } from "keepFPattern"');
+        expect(actual).to.contain('import "keepG";');
+        expect(actual).to.contain('import "keepHPattern"');
     });
 });

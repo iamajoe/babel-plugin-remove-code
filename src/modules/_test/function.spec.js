@@ -36,13 +36,13 @@ describe('remove-code.function', () => {
         expect(actual).to.not.contain('stripA()');
         expect(actual).to.not.contain('console.keepC.stripC(\'foo\')');
         expect(actual).to.not.contain('console.stripD(\'bar\')');
+        expect(actual).to.not.contain('console.stripD.keepD(\'bar\')');
     });
 
     it('should maintain other vars and functions', () => {
         expect(actual).to.contain('function keepA');
         expect(actual).to.contain('const keepB');
         expect(actual).to.contain('console.keepC(\'foo\')');
-        expect(actual).to.contain('console.stripD.keepD(\'bar\')');
         expect(actual).to.contain('const exists = true;');
     });
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-import { getObjItem, getsArrItem } from '../utils.js';
+import { getObjItem, getsArrItem, matches } from '../utils.js';
 
 // -----------------------------------------
 // Functions
@@ -14,15 +14,21 @@ import { getObjItem, getsArrItem } from '../utils.js';
  * @param {object} originalPath
  */
 const removeByArg = (t, opts = [], path) => {
-    if (!path || path.type !== 'CallExpression') { return; }
+    if (!path || path.removed || path.type !== 'CallExpression') { return; }
 
     // It doesn't exist in the options
     const args = path.get('arguments');
 
     // Now maybe we have something to remove!
-    const toRemove = args.length && getsArrItem(opts, path, args);
+    let toRemove = args.length && getsArrItem(opts, path, args);
+    toRemove = toRemove || [];
+    toRemove = toRemove.filter(val => !!val && !val.removed);
 
-    toRemove && !toRemove.removed && toRemove.remove();
+    if (toRemove && toRemove.length) {
+        for (let i = 0; i < toRemove.length; i += 1) {
+            toRemove[i] && !toRemove[i].removed && toRemove[i].remove();
+        }
+    }
 };
 
 /**
@@ -34,12 +40,12 @@ const removeByArg = (t, opts = [], path) => {
  * @param {object} originalPath
  */
 const remove = (t, opts = [], path) => {
-    if (!path) { return; }
+    if (!path || path.removed) { return; }
 
     // It doesn't exist in the options
     const pathHasIds = (path.type === 'CallExpression') ? path.get('callee') : path;
     const ids = getObjItem(pathHasIds);
-    if (opts.indexOf(ids.join('.')) === -1) { return; }
+    if (!matches(opts, ids.join('.'))) { return; }
 
     !path.removed && path.remove();
 };

@@ -4,64 +4,24 @@
 // Functions
 
 /**
- * Goes up to find a type
+ * Check if patterns matches
  *
- * @param {object} path
- * @param {array} types
- * @param {int} max
- * @returns {object}
+ * @param {array} data
+ * @param {string} pattern
+ * @returns {boolean}
  */
-const goUpRoot = (path, types = [], max = 5) => {
-    let rightPath = path;
-    let lastOfType = undefined;
+const matches = (data, pattern) => {
+    if (!pattern || !pattern.length || !data || !data.length) { return false; }
 
-    // Lets get the expression statement
-    for (let i = 0; i < max; i += 1) {
-        rightPath = rightPath.parentPath;
+    const filter = data.filter(val => {
+        const newPattern = val.replace(/\./g, '\.');
+        const reg = new RegExp(newPattern, 'g');
+        const is = reg.test(pattern);
 
-        if (!rightPath || !rightPath.type) {
-            break;
-        }
+        return is;
+    });
 
-        // Lets check for the type
-        if (types.indexOf(rightPath.type) !== -1 && !rightPath.removed) {
-            lastOfType = rightPath;
-        }
-
-        // Set a max of iteractions
-        i += 1;
-    }
-
-    return lastOfType;
-};
-
-/**
- * Goes up to find a type
- *
- * @param {object} path
- * @param {array} types
- * @param {int} max
- * @returns {object}
- */
-const goUp = (path, types = [], max = 5) => {
-    let rightPath = path || {};
-    let i = 0;
-
-    // Lets get the expression statement
-    while (types.indexOf(rightPath.type) === -1) {
-        // We need to break if we've gone too far
-        if (max === i || !rightPath.type) {
-            break;
-        }
-
-        // Lets get the next one
-        rightPath = rightPath.parentPath || {};
-
-        // Set a max of iteractions
-        i += 1;
-    }
-
-    return rightPath.type && !rightPath.removed && rightPath || undefined;
+    return !!filter[0];
 };
 
 /**
@@ -104,10 +64,10 @@ const getObjItem = (path) => {
  * @param {object} opts
  * @param {object} path
  * @param {array} properties
- * @returns
+ * @returns {array}
  */
 const getsArrItem = (opts, path, properties) => {
-    let rightProperty;
+    const rightProperties = [];
 
     // Go through each property
     for (let i = 0; i < properties.length; i += 1) {
@@ -120,74 +80,18 @@ const getsArrItem = (opts, path, properties) => {
         toCheck = toCheck || property.node.id && property.get('id');
         toCheck = toCheck && toCheck.node && toCheck.node.name;
 
-        if (opts.indexOf(toCheck) === -1) {
+        if (!matches(opts, toCheck)) {
             continue;
         }
 
         // It was found!
-        rightProperty = (properties.length > 1) ? property : path;
+        rightProperties.push((properties.length > 1) ? property : path);
     }
 
-    return rightProperty;
-};
-
-/**
- * Check for name in options
- *
- * @param {array} opts
- * @param {object} path
- * @returns {path}
- */
-const parsePath = (opts = [], path) => {
-    if (!opts.length || !path) { return undefined; }
-
-    const optsArr = opts.map((val) => {
-        const newArr = val.split('.').reverse();
-
-        // Check if actually exists something with the path name
-        const check = newArr.filter(cVal => cVal.indexOf(path.node.name || path.node.value) !== -1);
-
-        // No need to go further if it isn't an object
-        if (check.length && newArr.length === 1) {
-            return path;
-        } else if (!check.length) {
-            return false;
-        }
-
-        // We need to check for possible objects now...
-        // Lets get the root MemberExpression
-        const actualPath = goUpRoot(path, ['MemberExpression'], newArr.length + 1);
-        const objKeys = getObjItem(actualPath);
-
-        // It may not have keys for some reason
-        if (!objKeys.length) { return false; }
-
-        // Lets see if the object is the same
-        const name = path.node.name || path.node.value;
-        const isIt = name === objKeys[0] && newArr.join('.') === objKeys.join('.');
-        return isIt ? actualPath : false;
-    }).filter(val => !!val);
-
-    // Return the actual path
-    const actualPath = optsArr[0];
-    return actualPath && !actualPath.removed && actualPath || undefined;
-};
-
-/**
- * Remove of general
- *
- * @param {object} t
- * @param {array} opts
- * @param {object} path
- */
-const remove = (t, opts = [], path, actualType = []) => {
-    const actualPath = goUp(parsePath(opts, path), actualType);
-
-    // Now lets actually remove
-    actualPath && !actualPath.removed && actualPath.remove();
+    return rightProperties;
 };
 
 // -----------------------------------------
 // Export
 
-export { goUp, goUpRoot, parsePath, getObjItem, getsArrItem, remove };
+export { getObjItem, getsArrItem, matches };

@@ -13,7 +13,7 @@ import { getsArrItem } from '../utils.js';
  * @param {object} path
  */
 const remove = (t, opts = [], path) => {
-    if (!path) { return; }
+    if (!path || path.removed) { return; }
 
     let toRemove;
 
@@ -35,9 +35,15 @@ const remove = (t, opts = [], path) => {
 
         // Now maybe we have something to remove!
         toRemove = properties.length && getsArrItem(opts, path, properties);
+        toRemove = toRemove || [];
+        toRemove = toRemove.filter(val => !!val && !val.removed);
     }
 
-    toRemove && !toRemove.removed && toRemove.remove();
+    if (toRemove && toRemove.length) {
+        for (let i = 0; i < toRemove.length; i += 1) {
+            toRemove[i] && !toRemove[i].removed && toRemove[i].remove();
+        }
+    }
 };
 
 // -----------------------------------------

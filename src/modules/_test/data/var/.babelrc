@@ -1,7 +1,7 @@
 {
     "plugins": [
         ["../../../../index.js", {
-            "var": ["stripA", "stripB", "stripC", "stripD"]
+            "var": ["stripA", "stripB", "stripC", "stripD", "stripE", "stripF", "stripG", "stripH", "stripI"]
         }]
     ]
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-import { getObjItem } from '../utils.js';
+import { getObjItem, matches } from '../utils.js';
 
 // -----------------------------------------
 // Functions
@@ -21,8 +21,8 @@ const isEitherSide = (opts, path, leftKey = 'left', rightKey = 'right') => {
     const idsRight = getObjItem(right);
 
     return {
-        isLeft: opts.indexOf(idsLeft.join('.')) !== -1,
-        isRight: opts.indexOf(idsRight.join('.')) !== -1,
+        isLeft: matches(opts, idsLeft.join('.')),
+        isRight: matches(opts, idsRight.join('.')),
         left, right
     };
 };
@@ -35,7 +35,7 @@ const isEitherSide = (opts, path, leftKey = 'left', rightKey = 'right') => {
  * @param {object} path
  */
 const remove = (t, opts = [], path) => {
-    if (!path) { return; }
+    if (!path || path.removed) { return; }
 
     let toRemove;
 
@@ -45,6 +45,11 @@ const remove = (t, opts = [], path) => {
 
         toRemove = path;
     } else if (path.type === 'AssignmentExpression') {
+        // We should ignore it for now... It will be checked later
+        if (path.get('right').type === 'LogicalExpression') {
+            return;
+        }
+
         const isIt = isEitherSide(opts, path);
         if (!isIt.isLeft && !isIt.isRight) { return; }
 

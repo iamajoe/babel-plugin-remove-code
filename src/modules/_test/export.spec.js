@@ -29,13 +29,18 @@ describe('remove-code.export', () => {
 
     it('should remove export declarations', () => {
         expect(actual).to.not.contain('export const stripA');
-        expect(actual).to.not.contain('export { stripB }');
-        expect(actual).to.not.contain('export default { stripC }');
+        expect(actual).to.not.contain('export const stripBPattern');
+        expect(actual).to.not.contain('export { stripC }');
+        expect(actual).to.not.contain('export { stripDPattern }');
+        expect(actual).to.not.contain('export default { stripE');
+        expect(actual).to.not.contain('keepE, stripFPattern');
     });
 
     it('should maintain other vars and exports', () => {
         expect(actual).to.contain('export const keepA');
-        expect(actual).to.contain('export { keepB }');
-        expect(actual).to.contain('export default { keepC }');
+        expect(actual).to.contain('export const keepBPattern');
+        expect(actual).to.contain('export { keepC');
+        expect(actual).to.contain('export { keepDPattern');
+        expect(actual).to.contain('export default { keepE, keepFPattern };');
     });
 });
