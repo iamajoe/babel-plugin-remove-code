@@ -4,7 +4,7 @@
   "description": "Remove any code from your project.",
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:sendoushi/babel-plugin-remove-code.git"
+    "url": "git@github.com:sendoushi/babel-plugin-remove-code.git"
   },
   "authors": [
     "Joel Santos <joel@sendoushi.com>"
