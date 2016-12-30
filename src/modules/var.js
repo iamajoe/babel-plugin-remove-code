@@ -54,6 +54,12 @@ const remove = (t, opts = [], path) => {
         if (!isIt.isLeft && !isIt.isRight) { return; }
 
         toRemove = path;
+
+        // To fix a bug with classes
+        const parent = toRemove && toRemove.parentPath;
+        if (parent && parent.type === 'ConditionalExpression') {
+            toRemove = parent;
+        }
     } else if (path.type === 'BinaryExpression') {
         const isIt = isEitherSide(opts, path);
         if (!isIt.isLeft && !isIt.isRight) { return; }

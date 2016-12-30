@@ -27,3 +27,9 @@ import "keepHPattern";
 
 const keepI = fsF(fkF());
 const keepJ = fkF(fsF());
+
+import { stripK1, stripK2 } from "stripKPattern";
+import { keepK1, keepK2 } from "keepKPattern";
+
+const stripKVar =  stripK1(stripK2());
+const keepKVar =  keepK1(keepK2());
