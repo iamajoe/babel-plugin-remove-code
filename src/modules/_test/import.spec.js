@@ -39,6 +39,8 @@ describe('remove-code.import', () => {
         expect(actual).to.not.contain('import { fsFProxy as fsF } from "stripFPattern"');
         expect(actual).to.not.contain('import "stripG"');
         expect(actual).to.not.contain('import "stripHPattern"');
+        expect(actual).to.not.contain('const keepI = fsF(fkF())');
+        expect(actual).to.not.contain('const keepJ = fkF(fsF())');
     });
 
     it('should maintain other vars and import', () => {
@@ -53,5 +55,7 @@ describe('remove-code.import', () => {
         expect(actual).to.contain('import { fkFProxy as fkF } from "keepFPattern"');
         expect(actual).to.contain('import "keepG";');
         expect(actual).to.contain('import "keepHPattern"');
+        expect(actual).to.contain('const keepI;');
+        expect(actual).to.contain('const keepJ = fkF()');
     });
 });

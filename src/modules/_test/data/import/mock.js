@@ -24,3 +24,6 @@ import "stripG";
 import "keepG";
 import "stripHPattern";
 import "keepHPattern";
+
+const keepI = fsF(fkF());
+const keepJ = fkF(fsF());

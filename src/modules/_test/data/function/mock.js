@@ -8,4 +8,5 @@ console.keepC.stripC('foo');
 console.stripD('bar');
 console.stripD.keepD('bar');
 
-const exists = true;
+stripA(keepC());
+keepC(stripA());

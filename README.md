@@ -181,6 +181,9 @@ import "stripG";
 import "keepG";
 import "stripHPattern";
 import "keepHPattern";
+
+const keepI = fsF(fkF());
+const keepJ = fkF(fsF());
 ```
 
 **Out**
@@ -208,6 +211,9 @@ import { fkFProxy as fkF } from "keepFPattern";
 import "keepG";
 
 import "keepHPattern";
+
+const keepI;
+const keepJ = fkF();
 ```
 
 #### Function
@@ -223,6 +229,9 @@ console.keepC('foo');
 console.keepC.stripC('foo');
 console.stripD('bar');
 console.stripD.keepD('bar');
+
+stripA(keepC());
+keepC(stripA());
 ```
 
 **Out**
@@ -234,7 +243,7 @@ const keepB;
 
 console.keepC('foo');
 
-
+keepC();
 ```
 
 ## Installation
