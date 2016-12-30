@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-remove-code",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Remove any code from your project.",
   "repository": {
     "type": "git",
