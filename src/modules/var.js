@@ -60,6 +60,22 @@ const remove = (t, opts = [], path) => {
         if (parent && parent.type === 'ConditionalExpression') {
             toRemove = parent;
         }
+    } else if (path.type === 'Identifier') {
+        const id = getObjItem(path).join('.');
+        const isIt = matches(opts, id);
+        if (!isIt) {
+            return;
+        }
+
+        toRemove = path;
+    } else if (path.type === 'MemberExpression') {
+        const id = getObjItem(path).join('.');
+        const isIt = matches(opts, id);
+        if (!isIt) {
+            return;
+        }
+
+        toRemove = path;
     } else if (path.type === 'BinaryExpression') {
         const isIt = isEitherSide(opts, path);
         if (!isIt.isLeft && !isIt.isRight) { return; }

@@ -42,6 +42,12 @@ export default function ({ types: t }) {
             BinaryExpression(path) {
                 proceed(t, this.opts.var, path, removeVar);
             },
+            MemberExpression(path) {
+                proceed(t, this.opts.var, path, removeVar);
+            },
+            Identifier(path) {
+                proceed(t, this.opts.var, path, removeVar);
+            },
             // Debugger
             DebuggerStatement(path) {
                 const opts = this.opts.debugger;
