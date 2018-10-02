@@ -51,6 +51,9 @@ describe('remove-code.vars', () => {
         expect(actual).to.not.contain('if (stripFPattern');
         expect(actual).to.not.contain('keepA = stripA;');
         expect(actual).to.not.contain('keepB = stripB;');
+        expect(actual).to.not.contain('stripIdentifier');
+        expect(actual).to.not.contain('global.stripProp');
+        expect(actual).to.not.contain('global[\'stripProp\']');
     });
 
     it('should maintain other vars', () => {

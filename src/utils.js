@@ -37,7 +37,11 @@ const getObjItem = (path) => {
     if (!path) { return arr; }
 
     // For the identifier likes...
-    arr = (path.type === 'Identifier') ? [path.name || path.node.name] : arr;
+    if (path.type === 'Identifier') {
+        arr = [path.name || path.node.name];
+    } else if (path.type === 'StringLiteral') {
+        arr = [path.value];
+    }
 
     // Lets check under other possible keys
     toCheck = path.object || path.node && path.node.object;

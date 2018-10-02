@@ -42,3 +42,8 @@ if (stripFPattern === 'foo' && keepFPattern === 'foo') {}
 
 keepA = stripA;
 keepB = stripB && keepB;
+
+if (global.stripProp === 'foo') {}
+if (global.stripProp) {}
+if (global['stripProp']) {}
+if (stripIdentifier) {}
