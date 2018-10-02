@@ -9,6 +9,7 @@
   "authors": [
     "Joel Santos <joel@sendoushi.com>"
   ],
+  "license" : "MIT",
   "main": "./dist/index.js",
   "engines": {
     "node": ">=6"
